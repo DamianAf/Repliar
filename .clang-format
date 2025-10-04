@@ -1,0 +1,5 @@
+BasedOnStyle: Microsoft
+BreakBeforeBraces: Attach
+ContinuationIndentWidth: 8
+SortIncludes: false
+PointerAlignment: Left
