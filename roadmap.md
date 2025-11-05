@@ -5,12 +5,13 @@ This is a to-do list for building a 2D game engine.
 ---
  
 - [ ] Vector2 Class
-- [ ] Sprite Class
-- [ ] GameObject Class
-- [ ] Collider Class
-- [ ] Hot Reloading
+- [ ] Entity Class
 - [ ] Shader Class
-- [ ] Camera Class
+- [ ] Sprite Class
 - [ ] Render Abstraction
+- [ ] Collider Class
+- [ ] Object
+- [ ] Hot Reloading
+- [ ] Camera Class
 - [ ] Batch Rendering / Instancing
 - [ ] Level/Scene Loader

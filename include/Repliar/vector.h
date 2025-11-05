@@ -90,13 +90,17 @@ template <typename T> class Vector2 {
         return angleRad;
     }
 
-    // TODO: implement the Distance function that takes in 2 vectors and return the distance between them
-    static double Distance() {
+    static double Distance(const Vector2& from, const Vector2& to) {
+        if (from.x == to.x && from.y == to.y) [[unlikely]]
+            return 0.0;
+
+        double Dx = (double)(from.x - to.x);
+        double Dy = (double)(from.y - to.y);
+        return sqrt((Dx * Dx) + (Dy * Dy));
     }
 
   public:
     // operator overloading functions
-
     Vector2<T> operator+(const Vector2<T>& other) const {
         return Vector2(x + other.x, y + other.y);
     }
