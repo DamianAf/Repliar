@@ -4,8 +4,6 @@
 #include <string>
 #include <format>
 
-// TODO: Comment the remaining functions
-
 template <typename T> class Vector2 {
   public:
     T x, y;
@@ -73,10 +71,20 @@ template <typename T> class Vector2 {
     }
 
   public:
+    /**
+     * @brief returns the dot product of 2 vectors
+     */
     static T Dot(const Vector2& vector1, const Vector2& vector2) {
         return vector1.x * vector2.x + vector1.y * vector2.y;
     }
 
+    /**
+     * @brief returns the angle between 2 vectors
+     * @param from - the first vector
+     * @param to - the second vector
+     * @param inDegrees - optional argument for getting the answer in degrees/radians, defaults to true for degrees
+     * @returns the angle between 2 vectors as a double
+     */
     static double Angle(const Vector2& from, const Vector2& to, bool inDegrees = true) {
         T dot = from.x * to.x + from.y * to.y;
 

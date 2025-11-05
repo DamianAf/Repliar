@@ -3,8 +3,8 @@
 This is a to-do list for building a 2D game engine.
 
 ---
- 
-- [ ] Vector2 Class
+
+- [x] Vector2 Class
 - [ ] Entity Class
 - [ ] Shader Class
 - [ ] Sprite Class

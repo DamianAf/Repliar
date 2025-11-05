@@ -1,7 +1,6 @@
 #pragma once
 #include <functional>
 #include "Repliar/vector.h"
-
 // TODO: implement collider stuff
 
 class Entity {
