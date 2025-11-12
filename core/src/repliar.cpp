@@ -1,14 +1,14 @@
-#include "Repliar/repliar.h"
+#include "Repliar/repliar.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-const char *shader = "#version 460 core\n"
+const char* shader = "#version 460 core\n"
                      "layout (location = 0) in vec3 aPos;\n"
                      "void main()\n"
                      "{\n"
                      "   gl_Position = vec4(aPos, 1.0);\n"
                      "}\0";
-const char *shader2 = "#version 460 core\n"
+const char* shader2 = "#version 460 core\n"
                       "out vec4 FragColor;\n"
                       "void main()\n"
                       "{\n"
@@ -18,7 +18,7 @@ unsigned int shaderSrc, shaderSrc2;
 unsigned int program;
 
 // functions
-Repliar::Repliar(int width, int height, const char *title) : m_window(width, height, title) {
+Repliar::Repliar(int width, int height, const char* title) : m_window(width, height, title) {
 
     glfwMakeContextCurrent(m_window.GetHandle());
     gladLoadGL();
@@ -48,7 +48,7 @@ void Repliar::PrepareRender() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 void Repliar::Render() {
     PrepareRender();

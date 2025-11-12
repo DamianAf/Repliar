@@ -2,4 +2,5 @@ build/*
 !build/.gitkeep
 bin/
 .vscode
+.zed
 .cache

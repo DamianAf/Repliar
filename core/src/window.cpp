@@ -1,4 +1,4 @@
-#include "Repliar/window.h"
+#include "Repliar/window.hpp"
 #include <GLFW/glfw3.h>
 
 Window::Window(int width, int height, const char* title) : windowWidth(width), windowHeight(height) {
