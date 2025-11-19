@@ -12,11 +12,12 @@ enum ComponentType {
     CUSTOM_COMPONENT = (1U << 3),
 };
 
+namespace ComponentClass {
 struct Transform {
     Vector2<float> position;
     struct scale {
-        float x = 1.0f;
-        float y = 1.0f;
+        float x{1.0f};
+        float y{1.0f};
     };
     struct rotation {
         float x;
@@ -28,3 +29,4 @@ struct Transform {
 struct Sprite {};
 
 struct Collider {};
+} // namespace ComponentClass

@@ -1,4 +1,4 @@
-#include <Repliar/repliar.h>
+#include <Repliar/repliar.hpp>
 #include <iostream>
 
 int main() {

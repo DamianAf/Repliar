@@ -46,10 +46,10 @@ template <typename T> class Vector2 {
     Vector2<T> normalized() const {
         static_assert(std::is_floating_point_v<T>,
                       "Normalized() is only supported for floating-point vectors (float, double).");
-        T tempLength = length();
+        T tempLength{length()};
         if (tempLength != 0) {
-            T tempx = x / tempLength;
-            T tempy = y / tempLength;
+            T tempx{x / tempLength};
+            T tempy{y / tempLength};
             return Vector2<T>(tempx, tempy);
         }
         return Vector2<T>();
@@ -61,7 +61,7 @@ template <typename T> class Vector2 {
     Vector2<T>& Normalize() {
         static_assert(std::is_floating_point_v<T>,
                       "Normalized() is only supported for floating-point vectors (float, double).");
-        T tempLength = length();
+        T tempLength{length()};
         if (tempLength != 0) {
             x /= tempLength;
             y /= tempLength;
@@ -86,11 +86,11 @@ template <typename T> class Vector2 {
      * @return the angle between 2 vectors as a double
      */
     static double Angle(const Vector2& from, const Vector2& to, bool inDegrees = true) {
-        T dot = from.x * to.x + from.y * to.y;
+        T dot{from.x * to.x + from.y * to.y};
 
-        T cross = from.x * to.y - from.y * to.x;
+        T cross{from.x * to.y - from.y * to.x};
 
-        double angleRad = std::atan2(static_cast<double>(cross), static_cast<double>(dot));
+        double angleRad{std::atan2(static_cast<double>(cross), static_cast<double>(dot))};
         if (inDegrees) {
             return angleRad * 180.0 / std::numbers::pi;
         }
@@ -108,8 +108,8 @@ template <typename T> class Vector2 {
         if (from.x == to.x && from.y == to.y) [[unlikely]]
             return 0.0;
 
-        double Dx = (double)(from.x - to.x);
-        double Dy = (double)(from.y - to.y);
+        double Dx{(double)(from.x - to.x)};
+        double Dy{(double)(from.y - to.y)};
         return sqrt((Dx * Dx) + (Dy * Dy));
     }
 
