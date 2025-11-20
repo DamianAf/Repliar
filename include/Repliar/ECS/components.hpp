@@ -12,7 +12,7 @@ enum ComponentType {
     CUSTOM_COMPONENT = (1U << 3),
 };
 
-namespace ComponentClass {
+namespace Component {
 struct Transform {
     Vector2<float> position;
     struct scale {
@@ -29,4 +29,7 @@ struct Transform {
 struct Sprite {};
 
 struct Collider {};
-} // namespace ComponentClass
+struct Custom {
+    virtual ~Custom() = default;
+};
+} // namespace Component

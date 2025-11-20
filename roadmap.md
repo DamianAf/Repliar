@@ -5,7 +5,7 @@ This is a to-do list for building a 2D game engine.
 ---
 
 - [x] Vector2 Class
-- [ ] Entity Manager Class
+- [x] Entity Manager Class
 - [ ] Shader Class
 - [ ] Sprite Component
 - [ ] Render Abstraction

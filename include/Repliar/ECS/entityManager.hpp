@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <cstdint>
+#include <memory>
 #include <type_traits>
 #include <vector>
 #include "Repliar/ECS/components.hpp"
@@ -13,6 +14,10 @@ using components = std::uint16_t;
 
 class EntityManager {
   public:
+    /**
+     * @brief creates an Entity
+     * @return the Entity ID
+     */
     static Entity CreateEntity() {
 
         // Recycles ID's when possible
@@ -32,17 +37,40 @@ class EntityManager {
         return m_isAlive.size() - 1;
     }
 
+    /**
+     * @brief destroys the Entity entirely
+     */
     static void DestroyEntity(Entity id) {
         m_isAlive[id] = false;
         m_freeSpaceArray.push_back(id);
         m_bitflags[id] = 0;
+        if (id < m_customComponents.size()) {
+            m_customComponents[id].reset();
+        }
     }
 
+    /**
+     * @brief expects a Component type in the template
+     * @return the component specified
+     */
     template <typename T> static auto& getComponent(Entity id) {
         return m_getComponentPool<T>()[id];
     }
 
-    template <typename T> static void addComponent(Entity id) {
+    /**
+     * @return the custom component of the Entity
+     */
+    template <typename T> static auto& getCustomComponent(Entity id) {
+        assert(id < m_customComponents.size());
+        assert(m_customComponents[id] != nullptr);
+        return static_cast<T&>(*m_customComponents[id]);
+    }
+
+    /**
+     * @brief creates a new component or returns it if it already exists
+     * @return the Component specified
+     */
+    template <typename T> static auto& addComponent(Entity id) {
 
         constexpr components tempComponentFlag = getComponentBitmask<T>();
 
@@ -58,30 +86,58 @@ class EntityManager {
             // binds the component to the entity
             tempComponent[id] = T();
             m_bitflags[id] |= tempComponentFlag;
+
+            return tempComponent[id];
         }
+        return m_getComponentPool<T>()[id];
     }
 
-    // NOT_IMPLEMENTED
-    template <typename T> static void addCustomComponent(Entity id); // TODO: implement adding custom Component
+    /**
+     * @brief creates a custom component that inherits Component::Custom
+     */
+    template <typename T> static T& addCustomComponent(Entity id) {
+        static_assert(std::is_base_of_v<Component::Custom, T>, "T must derive from Component::Custom");
 
+        if ((m_bitflags[id] & ComponentType::CUSTOM_COMPONENT) == 0) {
+            if (m_customComponents.size() <= id) {
+                m_customComponents.resize(id + 1);
+            }
+            m_customComponents[id] = std::make_unique<T>();
+            if (m_bitflags.size() <= id) {
+                m_bitflags.resize(id + 1);
+            }
+            m_bitflags[id] |= ComponentType::CUSTOM_COMPONENT;
+        }
+        return static_cast<T&>(*m_customComponents[id]);
+    }
+
+    /**
+     * @brief gets the bitmask value of a component
+     * @return an int bit value of the component
+     */
     template <typename T> static constexpr ComponentType getComponentBitmask() {
-        if constexpr (std::is_same_v<T, Transform>) {
+        if constexpr (std::is_same_v<T, Component::Transform>) {
             return ComponentType::TRANSFORM_COMPONENT;
         }
-        if constexpr (std::is_same_v<T, Sprite>) {
+        if constexpr (std::is_same_v<T, Component::Sprite>) {
             return ComponentType::SPRITE_COMPONENT;
         }
-        if constexpr (std::is_same_v<T, Collider>) {
+        if constexpr (std::is_same_v<T, Component::Collider>) {
             return ComponentType::COLLIDER_COMPONENT;
         }
-        // if constexpr (std::is_same_v<T, Transform>) {
-        //     return ComponentType::TRANSFORM_COMPONENT;
-        // }
-        else {
+        if constexpr (std::is_base_of_v<T, Component::Custom>) {
+            return ComponentType::CUSTOM_COMPONENT;
+        } else {
             return ComponentType::NONE;
         }
     }
 
+    /**
+     * @brief creates the onUpdate function
+     * @param id the Entity id
+     * @param update a lamda or a function pointer of the onUpdate function (must expect a float deltaTime as a
+     * argument)
+     */
     static void OnUpdate(Entity id, void (*update)(float)) {
         m_updateArray.resize(id + 1);
         m_updateArray[id] = update;
@@ -98,6 +154,7 @@ class EntityManager {
         static std::vector<T> pool;
         return pool;
     }
+    inline static std::vector<std::unique_ptr<Component::Custom>> m_customComponents;
     inline static std::vector<void (*)(float)> m_updateArray;
     inline static std::vector<void (*)()> m_startArray;
     inline static std::vector<components> m_bitflags;
