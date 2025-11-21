@@ -1,6 +1,7 @@
 #pragma once
 #include "Repliar/window.hpp"
 #include "Repliar/vector.hpp"
+#include "Repliar/shader.hpp"
 
 class Repliar {
   public:
@@ -15,6 +16,7 @@ class Repliar {
 
   private:
     Window m_window;
+    Shader shader;
 
   private:
     void PrepareRender();

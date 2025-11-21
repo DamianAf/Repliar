@@ -1,21 +1,7 @@
 #include "Repliar/repliar.hpp"
+#include "Repliar/shader.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-const char* shader = "#version 460 core\n"
-                     "layout (location = 0) in vec3 aPos;\n"
-                     "void main()\n"
-                     "{\n"
-                     "   gl_Position = vec4(aPos, 1.0);\n"
-                     "}\0";
-const char* shader2 = "#version 460 core\n"
-                      "out vec4 FragColor;\n"
-                      "void main()\n"
-                      "{\n"
-                      "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f); // Orange triangle\n"
-                      "}\0";
-unsigned int shaderSrc, shaderSrc2;
-unsigned int program;
 
 // functions
 Repliar::Repliar(int width, int height, const char* title) : m_window(width, height, title) {
@@ -24,17 +10,15 @@ Repliar::Repliar(int width, int height, const char* title) : m_window(width, hei
     gladLoadGL();
     glViewport(0, 0, width, height);
 
-    shaderSrc = glCreateShader(GL_VERTEX_SHADER);
-    shaderSrc2 = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(shaderSrc, 1, &shader, NULL);
-    glShaderSource(shaderSrc2, 1, &shader2, NULL);
-    glCompileShader(shaderSrc);
-    glCompileShader(shaderSrc2);
-    program = glCreateProgram();
-    glAttachShader(program, shaderSrc);
-    glAttachShader(program, shaderSrc2);
-    glLinkProgram(program);
-    glUseProgram(program);
+    shader.LoadShaders("./shaders/default.vert", "./shaders/default.frag");
+
+    if (shader.id() == 0) {
+        std::fprintf(stderr, "FATAL: Shader failed to load!\n");
+        std::exit(1);
+    }
+
+    PrepareRender();
+
     running = true;
 }
 Repliar::~Repliar() {
@@ -51,8 +35,7 @@ void Repliar::PrepareRender() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 void Repliar::Render() {
-    PrepareRender();
-    glUseProgram(program);
+    glUseProgram(shader.id());
     glClearColor(1.0f, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glBindVertexArray(VAO);
