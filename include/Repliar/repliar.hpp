@@ -1,6 +1,7 @@
 #pragma once
 #include "Repliar/window.hpp"
 #include "Repliar/vector.hpp"
+#include "Repliar/ECS/entityManager.hpp"
 #include "Repliar/shader.hpp"
 
 class Repliar {

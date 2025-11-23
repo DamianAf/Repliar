@@ -135,14 +135,19 @@ class EntityManager {
     /**
      * @brief creates the onUpdate function
      * @param id the Entity id
-     * @param update a lamda or a function pointer of the onUpdate function (must expect a float deltaTime as a
-     * argument)
+     * @param update a lamda or a function pointer of the onUpdate function (must expect an Entity and  a float (aka
+     * deltaTime) as arguments)
      */
-    static void OnUpdate(Entity id, void (*update)(float)) {
+    static void OnUpdate(Entity id, void (*update)(Entity, float)) {
         m_updateArray.resize(id + 1);
         m_updateArray[id] = update;
     }
-    static void OnStart(Entity id, void (*start)()) {
+    /**
+     * @brief creates the onStart function
+     * @param id the Entity id
+     * @param start a lamda or a function pointer of the onStart function (must expect an Entity type as an argument)
+     */
+    static void OnStart(Entity id, void (*start)(Entity)) {
         m_startArray.resize(id + 1);
         m_startArray[id] = start;
     }
@@ -155,7 +160,7 @@ class EntityManager {
         return pool;
     }
     inline static std::vector<std::unique_ptr<Component::Custom>> m_customComponents;
-    inline static std::vector<void (*)(float)> m_updateArray;
-    inline static std::vector<void (*)()> m_startArray;
+    inline static std::vector<void (*)(Entity, float)> m_updateArray;
+    inline static std::vector<void (*)(Entity)> m_startArray;
     inline static std::vector<components> m_bitflags;
 };
