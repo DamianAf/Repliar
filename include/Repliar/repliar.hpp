@@ -13,6 +13,7 @@ class Repliar {
     Repliar(int width, int height, const char* title);
     ~Repliar();
 
+    void Start();
     void Update();
 
   private:

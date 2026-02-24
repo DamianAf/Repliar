@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <string>
 
+// Maybe: add comments to public functions
+
 class Shader {
   public:
     explicit Shader(const char* vertexPath, const char* fragmentPath);
@@ -21,7 +23,7 @@ class Shader {
     void SetFloat(const char* name, float value) const;
     void SetVec2(const char* name, float x, float y) const;
     void SetVec3(const char* name, float x, float y, float z) const;
-    void SetMat4(const char* name, const float* matrix) const;
+    void SetMat4(const char* name, const float* matrix) const; // TODO: switch to using glm matrices
 
     [[nodiscard]] GLuint id() const {
         return m_program;

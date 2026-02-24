@@ -1,6 +1,7 @@
 #pragma once
 
 #include <assert.h>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <type_traits>
@@ -9,8 +10,6 @@
 
 using Entity = std::uint32_t;
 using components = std::uint16_t;
-
-// TODO: add comments to each function
 
 class EntityManager {
   public:
@@ -139,7 +138,9 @@ class EntityManager {
      * deltaTime) as arguments)
      */
     static void OnUpdate(Entity id, void (*update)(Entity, float)) {
-        m_updateArray.resize(id + 1);
+        if (m_updateArray.size() <= id) {
+            m_updateArray.resize(id + 1);
+        }
         m_updateArray[id] = update;
     }
     /**
@@ -148,8 +149,28 @@ class EntityManager {
      * @param start a lamda or a function pointer of the onStart function (must expect an Entity type as an argument)
      */
     static void OnStart(Entity id, void (*start)(Entity)) {
-        m_startArray.resize(id + 1);
+        if (m_startArray.size() <= id) {
+            m_startArray.resize(id + 1);
+        }
         m_startArray[id] = start;
+    }
+
+    static void RunOnStartFunctions() {
+        Entity index{0};
+        for (auto function : m_startArray) {
+            function(index);
+            ++index;
+        }
+    }
+
+    static void RunOnUpdateFunctions() {
+        Entity index{0};
+        for (auto function : m_updateArray) {
+            // using 0.1 for the deltaTime as a placeholder
+            // TODO: implement the getDeltaTime function
+            function(index, 0.1);
+            ++index;
+        }
     }
 
   private:
